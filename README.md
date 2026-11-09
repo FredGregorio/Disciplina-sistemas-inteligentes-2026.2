@@ -13,7 +13,7 @@ Cada projeto tem um notebook com o código executado e um relatório (`relatorio
 | # | Problema | Técnica | Dataset | Notebook | Relatório | Colab |
 |---|---|---|---|---|---|---|
 | 1 | Previsão de produção de energia em usina de ciclo combinado | Regressão linear múltipla | UCI CCPP | [problema1.ipynb](Primeira%20Unidade/Projetos/01-regressao-linear-ccpp/src/problema1.ipynb) | [relatório](Primeira%20Unidade/Projetos/01-regressao-linear-ccpp/relatorio.md) | [![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FredGregorio/Disciplina-sistemas-inteligentes-2026.2/blob/main/Primeira%20Unidade/Projetos/01-regressao-linear-ccpp/src/problema1.ipynb) |
-| 2 | Previsão de doenças cardíacas | Regressão logística | UCI Heart Disease (Cleveland) | em andamento | | |
+| 2 | Previsão de doenças cardíacas | Regressão logística | UCI Heart Disease (Cleveland) | [problema2.ipynb](Primeira%20Unidade/Projetos/02-regressao-logistica-heart-disease/src/problema2.ipynb) | [relatório](Primeira%20Unidade/Projetos/02-regressao-logistica-heart-disease/relatorio.md) | [![Abrir no Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/FredGregorio/Disciplina-sistemas-inteligentes-2026.2/blob/main/Primeira%20Unidade/Projetos/02-regressao-logistica-heart-disease/src/problema2.ipynb) |
 | 3 | Classificação da qualidade de vinhos | k-NN | UCI Wine Quality | em andamento | | |
 | 4 | Classificação de risco de crédito | Árvore de decisão | UCI Statlog German Credit | em andamento | | |
 | 5 | Segmentação de clientes | k-Means | UCI Wholesale Customers | em andamento | | |
