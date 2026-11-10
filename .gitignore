@@ -6,9 +6,3 @@ __pycache__/
 
 # segredos
 .env
-
-# material de estudo local (vídeos de explicação) - não faz parte da entrega
-ferramentas/
-Primeira Unidade/Projetos/*/video/
-*.mp3
-*.mp4
