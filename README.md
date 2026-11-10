@@ -36,12 +36,12 @@ Primeira Unidade/
 
 ## Como executar
 
-### Opção 1 - Google Colab (sem instalar nada)
+### Google Colab 
 
-Clique no botão **Abrir no Colab** do projeto e execute todas as células (*Ambiente de execução → Executar tudo*).
+Clique no botão Abrir no Colab do projeto e execute todas as células.
 O notebook baixa o dataset diretamente deste repositório.
 
-### Opção 2 - No próprio computador
+### No próprio computador
 
 Requer Python 3.11 ou superior.
 
