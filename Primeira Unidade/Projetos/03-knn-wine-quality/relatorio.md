@@ -27,7 +27,7 @@ k-NN. Dataset: UCI Wine Quality, arquivo `winequality-red.csv`, com 1.599 vinhos
 - **Normalização Min-Max** (atributos entre 0 e 1), ajustada só no treino.
 
 **Por que a normalização é obrigatória no k-NN?** O k-NN decide pela **distância euclidiana** entre os vinhos.
-Os atributos têm escalas muito diferentes: `total sulfur dioxide` vai de 6 a 278, enquanto `density` varia de
+Os atributos têm escalas muito diferentes: `total sulfur dioxide` vai de 6 a 289, enquanto `density` varia de
 0,990 a 1,004. Sem normalizar, as variáveis com valores grandes dominariam a distância e as demais seriam
 praticamente ignoradas. Com a normalização, todas contribuem de forma equilibrada.
 
@@ -54,9 +54,17 @@ bom 1,3% / 1,1%). Sem a estratificação, a classe "bom" poderia nem aparecer no
 - **k muito baixo:** o modelo depende de um único vizinho, "decora" o treino e é sensível a ruído e outliers →
   **overfitting** (alta variância). Por isso `k = 1` teve o pior desempenho.
 - **k muito alto:** a votação envolve vizinhos distantes e de outras classes; a fronteira fica suave demais e o
-  modelo tende a prever sempre a classe majoritária → **underfitting** (alto viés).
-- A curva ainda subia em `k = 11` (o maior valor sugerido no enunciado), então valores um pouco maiores poderiam
-  ser explorados.
+  modelo tende a prever sempre a classe majoritária → **underfitting** (alto viés). Para comprovar, foram testados
+  também valores bem maiores que os do enunciado:
+
+  | k | 11 | 21 | 51 | 101 | 201 | 401 | 601 | 801 |
+  |---|---|---|---|---|---|---|---|---|
+  | Acurácia média | **0,708** | 0,700 | 0,704 | 0,707 | 0,703 | 0,694 | 0,673 | 0,524 |
+
+  ![Acurácia com k muito alto](resultados/acuracia_k_alto.png)
+
+  De `k = 11` até `k ≈ 200` a acurácia fica estável (~0,70); depois ela cai até **0,524** com `k = 801`, quase igual
+  aos 51,6% de quem responde sempre "médio" (a classe majoritária). Nenhum valor maior superou `k = 11`.
 
 ## 5. Tarefa 4 - Avaliação no conjunto de teste
 
