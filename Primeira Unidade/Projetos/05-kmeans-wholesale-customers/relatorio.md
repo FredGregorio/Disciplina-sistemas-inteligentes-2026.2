@@ -93,7 +93,7 @@ Dez execuções com `n_init=1` e sementes de 0 a 9 (k = 3):
 ![Inicialização](resultados/inicializacao.png)
 
 As duas inicializações chegaram ao melhor valor (~1553) em 6 das 10 execuções, mas com `random` os resultados foram
-**mais dispersos** e uma execução parou num mínimo local bem pior (1626,55).
+mais dispersos e uma execução parou num mínimo local bem pior (1626,55).
 
 **Problema que o k-means++ mitiga:** o k-Means converge para um **mínimo local** que depende dos centróides iniciais.
 Sorteados ao acaso, eles podem cair próximos entre si (dois no mesmo grupo natural), levando a uma solução ruim. O
@@ -113,11 +113,11 @@ Centróides revertidos para a escala original (desfazendo o z-score com `inverse
 
 ![Centróides por categoria](resultados/centroides_barras.png)
 
-- **Hotéis e restaurantes:** muito Fresh e Frozen, quase nada de Grocery e Detergents_Paper → entregas frequentes
+- Hotéis e restaurantes: muito Fresh e Frozen, quase nada de Grocery e Detergents_Paper → entregas frequentes
   de perecíveis e logística refrigerada.
-- **Grandes compradores:** gasto alto em todas as categorias → clientes mais valiosos: atendimento dedicado,
+- Grandes compradores: gasto alto em todas as categorias → clientes mais valiosos: atendimento dedicado,
   descontos por volume, limite de crédito maior.
-- **Mercearias e varejo:** quase nada de frescos e muita mercearia, limpeza e laticínios → campanhas de produtos de
+- Mercearias e varejo: quase nada de frescos e muita mercearia, limpeza e laticínios → campanhas de produtos de
   prateleira para revenda.
 
 **Validação externa:**
@@ -137,30 +137,27 @@ Centróides revertidos para a escala original (desfazendo o z-score com `inverse
 - **ARI com Channel = 0,350** (com k = 2, o ARI seria 0,514).
 - **ARI com Region = −0,006.**
 
-**O algoritmo reconstruiu o canal de venda sem tê-lo visto? Em grande parte, sim.** O grupo Hotéis e restaurantes
+O algoritmo reconstruiu o canal de venda sem tê-lo visto? Em grande parte, sim. O grupo Hotéis e restaurantes
 é 98,6% Horeca (210 de 213). Os outros dois grupos são majoritariamente Retail, mas misturados. Com 3 grupos contra 2
 canais a concordância nunca seria perfeita; com k = 2 ela sobe para ARI = 0,514.
 
-**Categorias que mais separam Horeca de Retail:** **Detergents_Paper** (Retail gasta 9,2 vezes mais), **Grocery**
-(4,1 vezes) e **Milk** (3,1 vezes); no sentido oposto, Horeca gasta mais em **Frozen** (2,3 vezes) e **Fresh**
+Categorias que mais separam Horeca de Retail: Detergents_Paper (Retail gasta 9,2 vezes mais), Grocery
+(4,1 vezes) e Milk (3,1 vezes); no sentido oposto, Horeca gasta mais em Frozen (2,3 vezes) e Fresh
 (1,5 vez).
 
-**A região se reflete nos agrupamentos? Não.** As proporções de Lisboa, Porto e outras regiões são semelhantes em
+A região se reflete nos agrupamentos? Não. As proporções de Lisboa, Porto e outras regiões são semelhantes em
 todos os grupos e o ARI é praticamente zero: o perfil de consumo depende do tipo de negócio, não da localização.
 
-**Limitações do k-Means evidenciadas pelo PCA** (2 componentes explicam 71,3% da variação):
+Limitações do k-Means evidenciadas pelo PCA (2 componentes explicam 71,3% da variação):
 
 ![Grupos projetados por PCA](resultados/pca_grupos.png)
 
-1. **Grupos esféricos e de tamanhos semelhantes:** os clientes formam uma nuvem contínua, sem espaços vazios entre
+1. Grupos esféricos e de tamanhos semelhantes: os clientes formam uma nuvem contínua, sem espaços vazios entre
    os grupos. O k-Means corta essa nuvem em regiões arredondadas em torno dos centróides, com fronteiras retas;
    clientes perto das fronteiras poderiam estar em qualquer dos grupos vizinhos, e grupos de formato alongado ou
    irregular não seriam capturados.
-2. **Sensibilidade a outliers:** há clientes muito afastados da nuvem (à esquerda e embaixo no gráfico). O k-Means
+2. Sensibilidade a outliers: há clientes muito afastados da nuvem (à esquerda e embaixo no gráfico). O k-Means
    precisa colocá-los em algum grupo e, como o centróide é uma média, eles o puxam na sua direção. O grupo
    Mercearias e varejo é o mais espalhado por causa desses pontos. O log reduziu esse efeito, mas não o eliminou.
 
-## 7. Como reproduzir
 
-- **Google Colab:** clique em "Abrir no Colab" acima e execute todas as células.
-- **No computador:** siga as instruções do [README](../../../README.md) e execute `src/problema5.ipynb`.
