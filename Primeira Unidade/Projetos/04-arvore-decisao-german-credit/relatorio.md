@@ -34,7 +34,7 @@ atributos de escalas diferentes.
 
 ## 4. Tarefa 3 - Divisão treino/teste
 
-80% treino (800) e 20% teste (200), **estratificada** e com `random_state=42`. As duas partes ficaram com
+80% treino (800) e 20% teste (200), estratificada e com `random_state=42`. As duas partes ficaram com
 exatamente 70% `good` e 30% `bad`.
 
 ## 5. Tarefa 4 - Profundidade máxima (validação cruzada de 5 folds)
@@ -69,26 +69,30 @@ A árvore final tem 25 folhas.
 ![Árvore de decisão](resultados/arvore.png)
 ![Importância dos atributos](resultados/importancia_atributos.png)
 
-**Três atributos mais determinantes:**
+Três atributos mais determinantes:
 
-1. checking_status (situação da conta corrente), em especial não possui conta no checking:
+1. `checking_status` (situação da conta corrente), em especial "não possui conta" (`no checking`):
    importância 0,306. É a pergunta da raiz.
-2. duration (duração do empréstimo): 0,109.
-3. age (idade): 0,084.
+2. `duration` (duração do empréstimo): 0,109.
+3. `age` (idade): 0,084.
 
-**Regras do caminho até a folha com mais maus pagadores** (96 `bad` x 135 `good`, 231 clientes no treino):
+Regras do caminho até a folha com mais maus pagadores (96 `bad` x 135 `good`, 231 clientes no treino):
 
-> **SE** o cliente **possui conta corrente**
-> **E** a duração do empréstimo é de **12 a 47 meses**
-> **E** o valor solicitado é **maior que 1.381,50 marcos**
-> **E** a finalidade **não é carro usado**
-> **ENTÃO** a árvore prevê **"good"**.
+> SE o cliente possui conta corrente
+> E a duração do empréstimo é de 12 a 47 meses
+> E o valor solicitado é maior que 1.381,50 marcos
+> E a finalidade não é carro usado
+> ENTÃO a árvore prevê "good".
 
 Ela tem o maior número absoluto de maus pagadores porque é a maior folha da árvore, mas a maioria ali (58%) é de bons pagadores, então a previsão é "good". Isso mostra que a árvore não consegue separar bem os clientes desse grupo grande.
 
 Para comparação, a folha que prevê "bad" com mais maus pagadores (55 `bad` x 27 `good`):
 
-> Se o cliente possui conta corrente e a duração é de 12 a 47 meses e o valor solicitado é no máximo 1.381,50 marcos e não há fiador então a árvore prevê "bad".
+> SE o cliente possui conta corrente
+> E a duração é de 12 a 47 meses
+> E o valor solicitado é no máximo 1.381,50 marcos
+> E não há fiador
+> ENTÃO a árvore prevê "bad".
 
 ## 7. Tarefa 6 - Avaliação no conjunto de teste
 
@@ -100,11 +104,11 @@ Para comparação, a folha que prevê "bad" com mais maus pagadores (55 `bad` x 
 | `class_weight="balanced"` | 0,615 | 0,429 | **0,850** | 9 | 68 |
 
 Qual erro é mais frequente? Classificar um mau pagador como bom: 47 dos 60 maus pagadores do teste foram
-aprovados (recall de bad = 0,217). A acurácia de 0,70 é igual à do "sempre good".
+aprovados (recall de `bad` = 0,217). A acurácia de 0,70 é igual à do "sempre good".
 
 Por que é o mais grave? Porque significa conceder crédito a quem não vai pagar, o que gera prejuízo
 direto. Recusar um bom pagador gera apenas perda de receita. A documentação do dataset atribui custo 5 vezes maior a esse erro.
 
-Que ajuste eu faria? Treinar com class_weight="balanced", que dá mais peso aos erros na classe minoritária. Os maus pagadores aprovados caíram de 47 para 9 e o recall de bad subiu para 0,85. O preço
-foi recusar mais bons pagadores (13 → 68) e a acurácia cair para 0,615. Como aprovar um mau pagador é o erro mais caro, a troca compensa. Outras opções seriam pesos ainda maiores para bad, seguindo o custo 5, ou mudar o limiar de decisão.
+Que ajuste eu faria? Treinar com `class_weight="balanced"`, que dá mais peso aos erros na classe minoritária. Os maus pagadores aprovados caíram de 47 para 9 e o recall de `bad` subiu para 0,85. O preço
+foi recusar mais bons pagadores (13 → 68) e a acurácia cair para 0,615. Como aprovar um mau pagador é o erro mais caro, a troca compensa. Outras opções seriam pesos ainda maiores para `bad`, seguindo o custo 5, ou mudar o limiar de decisão.
 

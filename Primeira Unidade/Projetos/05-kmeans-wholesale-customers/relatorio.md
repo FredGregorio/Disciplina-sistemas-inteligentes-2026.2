@@ -8,7 +8,7 @@ Código completo e executado: [`src/problema5.ipynb`](src/problema5.ipynb)
 Identificar perfis de consumo dos clientes de um distribuidor atacadista com o k-Means (aprendizado não
 supervisionado). Dataset: UCI Wholesale Customers, com 440 clientes e gastos anuais em seis categorias
 ([`data/wholesale_customers.csv`](data/wholesale_customers.csv)). Sem valores ausentes. `Channel` (1 = Horeca,
-298 clientes; 2 = Retail, 142) e `Region` (1 = Lisboa, 77; 2 = Porto, 47; 3 = outras, 316) **não** foram usados
+298 clientes; 2 = Retail, 142) e `Region` (1 = Lisboa, 77; 2 = Porto, 47; 3 = outras, 316) não foram usados
 no agrupamento, apenas na validação externa.
 
 ## 2. Tarefa 1 - Preparação dos dados
@@ -25,21 +25,21 @@ no agrupamento, apenas na validação externa.
 ![Histogramas originais](resultados/histogramas_originais.png)
 
 Em todas as categorias a média é bem maior que a mediana e os máximos ficam muito acima do restante: as
-distribuições são **fortemente assimétricas à direita**.
+distribuições são fortemente assimétricas à direita.
 
-**(a) Por que a transformação logarítmica `x' = log(1 + x)`?** O log comprime muito mais os valores grandes que os
+(a) Por que a transformação logarítmica `x' = log(1 + x)`? O log comprime muito mais os valores grandes que os
 pequenos (um gasto 100 vezes maior vira só ~4,6 unidades a mais). Isso torna as distribuições mais simétricas e
 aproxima os outliers (clientes de gasto muito alto) dos demais, evitando que eles puxem sozinhos os centróides, que
 são médias e por isso sensíveis a valores extremos.
 
 ![Histogramas após o log](resultados/histogramas_log.png)
 
-**(b) Por que a padronização (z-score) é determinante para o k-Means?** O k-Means atribui cada cliente ao centróide
-mais próximo pela **distância euclidiana**, que soma as diferenças ao quadrado de todos os atributos. Uma categoria
+(b) Por que a padronização (z-score) é determinante para o k-Means? O k-Means atribui cada cliente ao centróide
+mais próximo pela distância euclidiana, que soma as diferenças ao quadrado de todos os atributos. Uma categoria
 com valores maiores dominaria a distância e os grupos seriam formados quase só por ela. Com o z-score (média 0,
 desvio 1), as seis categorias pesam igualmente.
 
-**Correlação:** o par **Grocery x Detergents_Paper** tem correlação de **0,925** (0,797 após o log), a maior da
+Correlação: o par Grocery x Detergents_Paper tem correlação de 0,925 (0,797 após o log), a maior da
 matriz. São os produtos típicos de revenda no varejo: quem compra muito um, compra muito o outro. As duas
 variáveis carregam praticamente a mesma informação, um "eixo varejo".
 
@@ -47,13 +47,13 @@ variáveis carregam praticamente a mesma informação, um "eixo varejo".
 
 ## 3. Tarefa 2 - Ausência de divisão treino/teste
 
-No aprendizado **supervisionado** o teste serve para **estimar o erro de generalização**: medir o acerto em rótulos
-que o modelo não viu. No **agrupamento** não existe rótulo, logo não existe acerto a medir; o objetivo é
-**descrever a estrutura** dos dados disponíveis, e por isso usamos todos os 440 clientes.
+No aprendizado supervisionado o teste serve para estimar o erro de generalização: medir o acerto em rótulos
+que o modelo não viu. No agrupamento não existe rótulo, logo não existe acerto a medir; o objetivo é
+descrever a estrutura dos dados disponíveis, e por isso usamos todos os 440 clientes.
 
-A **dificuldade central da validação** é afirmar que uma partição é "boa" **sem gabarito**: os mesmos dados admitem
-vários agrupamentos razoáveis. Recorre-se a critérios indiretos: **internos** (inércia, silhueta), **externos**
-(informação não usada pelo algoritmo, como `Channel` e `Region`) e a **interpretabilidade** dos grupos.
+A dificuldade central da validação é afirmar que uma partição é "boa" sem gabarito: os mesmos dados admitem
+vários agrupamentos razoáveis. Recorre-se a critérios indiretos: internos (inércia, silhueta), externos
+(informação não usada pelo algoritmo, como `Channel` e `Region`) e a interpretabilidade dos grupos.
 
 ## 4. Tarefa 3 - Escolha do número de grupos
 
@@ -64,19 +64,19 @@ vários agrupamentos razoáveis. Recorre-se a critérios indiretos: **internos**
 
 ![Cotovelo e silhueta](resultados/cotovelo_silhueta.png)
 
-**Escolha: k = 3.**
+Escolha: k = 3.
 
-- **Cotovelo:** a maior queda de inércia é de k = 2 para k = 3 (−290,6); depois as quedas diminuem (−166,6,
+- Cotovelo: a maior queda de inércia é de k = 2 para k = 3 (−290,6); depois as quedas diminuem (−166,6,
   −120,7, −91,4...).
-- **Silhueta:** máxima em k = 2 (0,290), com k = 3 logo atrás (0,259); a partir de k = 4 cai para ~0,19.
-- **Interpretabilidade comercial:** com k = 2 os grupos quase repetem a divisão Horeca x Varejo, que a empresa já
-  conhece. Com k = 3 surge o perfil de **grandes compradores**, que pede uma ação comercial própria.
+- Silhueta: máxima em k = 2 (0,290), com k = 3 logo atrás (0,259); a partir de k = 4 cai para ~0,19.
+- Interpretabilidade comercial: com k = 2 os grupos quase repetem a divisão Horeca x Varejo, que a empresa já
+  conhece. Com k = 3 surge o perfil de grandes compradores, que pede uma ação comercial própria.
 
-**Por que a inércia decresce monotonicamente com k?** Um centróide a mais nunca afasta um cliente do centróide mais
+Por que a inércia decresce monotonicamente com k? Um centróide a mais nunca afasta um cliente do centróide mais
 próximo, e em geral aproxima vários. Logo, a soma das distâncias ao quadrado sempre diminui, e a inércia não pode
 ser usada sozinha: ela sempre "preferiria" o maior k.
 
-**Caso limite (k = 440):** cada cliente vira seu próprio grupo, o centróide coincide com ele e a **inércia é zero**.
+Caso limite (k = 440): cada cliente vira seu próprio grupo, o centróide coincide com ele e a inércia é zero.
 A partição é "perfeita" pela inércia e totalmente inútil.
 
 ## 5. Tarefa 4 - Inicialização e convergência
@@ -95,9 +95,9 @@ Dez execuções com `n_init=1` e sementes de 0 a 9 (k = 3):
 As duas inicializações chegaram ao melhor valor (~1553) em 6 das 10 execuções, mas com `random` os resultados foram
 mais dispersos e uma execução parou num mínimo local bem pior (1626,55).
 
-**Problema que o k-means++ mitiga:** o k-Means converge para um **mínimo local** que depende dos centróides iniciais.
+Problema que o k-means++ mitiga: o k-Means converge para um mínimo local que depende dos centróides iniciais.
 Sorteados ao acaso, eles podem cair próximos entre si (dois no mesmo grupo natural), levando a uma solução ruim. O
-k-means++ escolhe cada novo centróide com **probabilidade proporcional ao quadrado da distância** ao centróide mais
+k-means++ escolhe cada novo centróide com probabilidade proporcional ao quadrado da distância ao centróide mais
 próximo já escolhido, espalhando os centróides iniciais. Ele reduz, mas não elimina, o risco; por isso o modelo final
 usa `n_init=10` e fica com a execução de menor inércia.
 
@@ -120,7 +120,7 @@ Centróides revertidos para a escala original (desfazendo o z-score com `inverse
 - Mercearias e varejo: quase nada de frescos e muita mercearia, limpeza e laticínios → campanhas de produtos de
   prateleira para revenda.
 
-**Validação externa:**
+Validação externa:
 
 | Grupo | Horeca | Retail |
 |---|---|---|
@@ -134,8 +134,8 @@ Centróides revertidos para a escala original (desfazendo o z-score com `inverse
 | Grandes compradores | 23 | 11 | 113 |
 | Mercearias e varejo | 14 | 10 | 56 |
 
-- **ARI com Channel = 0,350** (com k = 2, o ARI seria 0,514).
-- **ARI com Region = −0,006.**
+- ARI com Channel = 0,350 (com k = 2, o ARI seria 0,514).
+- ARI com Region = −0,006.
 
 O algoritmo reconstruiu o canal de venda sem tê-lo visto? Em grande parte, sim. O grupo Hotéis e restaurantes
 é 98,6% Horeca (210 de 213). Os outros dois grupos são majoritariamente Retail, mas misturados. Com 3 grupos contra 2

@@ -5,15 +5,15 @@ Código completo e executado: [`src/problema1.ipynb`](src/problema1.ipynb)
 
 ## 1. Problema e dados
 
-Prever a potência elétrica de saída PE, em MW de uma usina de ciclo combinado a partir de quatro
-sensores ambientais: temperatura AT, vácuo de escape V, pressão ambiente AP e umidade
-relativa RH. Dataset: UCI Combined Cycle Power Plant, com 9.568 amostras ([data/ccpp.csv](data/ccpp.csv)).
+Prever a potência elétrica de saída (`PE`, em MW) de uma usina de ciclo combinado a partir de quatro
+sensores ambientais: temperatura (`AT`), vácuo de escape (`V`), pressão ambiente (`AP`) e umidade
+relativa (`RH`). Dataset: UCI Combined Cycle Power Plant, com 9.568 amostras ([`data/ccpp.csv`](data/ccpp.csv)).
 
 ## 2. Pré-processamento
 
-- Valores ausentes: não há nenhum verificado com df.isna().sum(), então não foi preciso imputar.
-- Divisão: 80% treino 7.654 amostras e 20% teste 1.914 amostras, com random_state=42.
-- Padronização (z-score):StandardScaler ajustado só no treino e depois aplicado ao teste, para
+- Valores ausentes: não há nenhum (verificado com `df.isna().sum()`), então não foi preciso imputar.
+- Divisão: 80% treino (7.654 amostras) e 20% teste (1.914 amostras), com `random_state=42`.
+- Padronização (z-score): `StandardScaler` ajustado só no treino e depois aplicado ao teste, para
   não vazar informação do conjunto de teste.
 
 ## 3. Tarefa 1 - Correlação das variáveis com PE
@@ -39,13 +39,13 @@ quentes e maior vácuo de escape reduzem a energia gerada. AP e RH têm influên
 
 ![Matriz de correlação](resultados/correlacao.png)
 
-Resposta: sim. AT e V têm correlação forte 0,84, o que indica multicolinearidade: as duas
+Resposta: sim. AT e V têm correlação forte (0,84), o que indica multicolinearidade: as duas
 variáveis carregam quase a mesma informação. Na prática, os coeficientes individuais de AT e V ficam
 menos confiáveis para interpretar, mas a qualidade da previsão não é prejudicada.
 
 ## 5. Tarefa 3 - Modelo de regressão linear múltipla
 
-Modelo: PE = θ0 + θ1·AT + θ2·V + θ3·AP + θ4·RH, treinado com LinearRegression do scikit-learn sobre as
+Modelo: PE = θ0 + θ1·AT + θ2·V + θ3·AP + θ4·RH, treinado com `LinearRegression` do scikit-learn sobre as
 variáveis padronizadas.
 
 | Parâmetro | Valor |
@@ -68,5 +68,5 @@ Como as variáveis estão padronizadas, os coeficientes são comparáveis: AT é
 ![Real x Previsto](resultados/real_vs_previsto.png)
 ![Resíduos](resultados/residuos.png)
 
-O modelo é adequado para prever a produção de energia? Sim, com ressalvas. Explica cerca de 93% da variação de PE. O erro típico é de ~4,5 MW (RMSE) e ~3,6 MW (MAE), pequeno diante do desvio padrão de PE 17 MW e da faixa de valores 420 a 496 MW. Treino e teste têm métricas praticamente iguais, então não há overfitting e o modelo generaliza bem. Porem o gráfico de resíduos mostra uma leve curvatura e erros um pouco maiores nas pontas e a relação não é perfeitamente linear, e um modelo mais flexível poderia melhorar um pouco o resultado.
+O modelo é adequado para prever a produção de energia? Sim, com ressalvas. Explica cerca de 93% da variação de PE. O erro típico é de ~4,5 MW (RMSE) e ~3,6 MW (MAE), pequeno diante do desvio padrão de PE (17 MW) e da faixa de valores (420 a 496 MW). Treino e teste têm métricas praticamente iguais, então não há overfitting e o modelo generaliza bem. Porém, o gráfico de resíduos mostra uma leve curvatura e erros um pouco maiores nas pontas, e a relação não é perfeitamente linear. Um modelo mais flexível poderia melhorar um pouco o resultado.
 
