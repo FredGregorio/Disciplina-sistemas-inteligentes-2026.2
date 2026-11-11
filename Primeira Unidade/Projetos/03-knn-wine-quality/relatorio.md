@@ -13,7 +13,7 @@ k-NN. Dataset: UCI Wine Quality, arquivo `winequality-red.csv`, com 1.599 vinhos
 
 - Duplicatas removidas: o arquivo tem 240 linhas repetidas. Elas foram removidas antes da divisão, restando
   1.359 vinhos. No k-NN, uma cópia no treino e outra no teste fazem o vizinho mais próximo ser o próprio vinho
-  (distância zero), o que infla a acurácia. Antes da remoção, 63 dos 320 vinhos do teste tinham cópia idêntica no
+  distância zero, o que infla a acurácia. Antes da remoção, 63 dos 320 vinhos do teste tinham cópia idêntica no
   treino, e isso fazia k = 1 parecer o melhor valor de forma enganosa.
 - Recodificação da qualidade: nota ≤ 5 → ruim; 6–7 → médio; ≥ 8 → bom.
 
@@ -26,8 +26,8 @@ k-NN. Dataset: UCI Wine Quality, arquivo `winequality-red.csv`, com 1.599 vinhos
   A classe bom tem apenas 1,3% dos dados: o conjunto é desbalanceado.
 - Normalização Min-Max (atributos entre 0 e 1), ajustada só no treino.
 
-Por que a normalização é obrigatória no k-NN? O k-NN decide pela distância euclidiana entre os vinhos.
-Os atributos têm escalas muito diferentes: `total sulfur dioxide` vai de 6 a 289, enquanto density varia de
+Por que normalizei? O k-NN decide pela distância euclidiana entre os vinhos.
+Os atributos têm escalas muito diferentes: total sulfur dioxide vai de 6 a 289, enquanto density varia de
 0,990 a 1,004. Sem normalizar, as variáveis com valores grandes dominariam a distância e as demais seriam
 praticamente ignoradas. Com a normalização, todas contribuem de forma equilibrada.
 
@@ -51,10 +51,10 @@ bom 1,3% / 1,1%). Sem a estratificação, a classe "bom" poderia nem aparecer no
 
 **Melhor valor: k = 11.**
 
-- **k muito baixo:** o modelo depende de um único vizinho, "decora" o treino e é sensível a ruído e outliers →
-  **overfitting** (alta variância). Por isso `k = 1` teve o pior desempenho.
-- **k muito alto:** a votação envolve vizinhos distantes e de outras classes; a fronteira fica suave demais e o
-  modelo tende a prever sempre a classe majoritária → **underfitting** (alto viés). Para comprovar, foram testados
+- k muito baixo: o modelo depende de um único vizinho, "decora" o treino e é sensível a ruído e outliers →
+  overfitting (alta variância). Por isso k = 1 teve o pior desempenho.
+- k muito alto: a votação envolve vizinhos distantes e de outras classes; a fronteira fica suave demais e o
+  modelo tende a prever sempre a classe majoritária → underfitting (alto viés). Para comprovar, foram testados
   também valores bem maiores que os do enunciado:
 
   | k | 11 | 21 | 51 | 101 | 201 | 401 | 601 | 801 |
@@ -63,8 +63,8 @@ bom 1,3% / 1,1%). Sem a estratificação, a classe "bom" poderia nem aparecer no
 
   ![Acurácia com k muito alto](resultados/acuracia_k_alto.png)
 
-  De `k = 11` até `k ≈ 200` a acurácia fica estável (~0,70); depois ela cai até **0,524** com `k = 801`, quase igual
-  aos 51,6% de quem responde sempre "médio" (a classe majoritária). Nenhum valor maior superou `k = 11`.
+  De k = 11 até k ≈ 200 a acurácia fica estável (~0,70); depois ela cai até **0,524** com k = 801, quase igual
+  aos 51,6% de quem responde sempre "médio" (a classe majoritária). Nenhum valor maior superou k = 11.
 
 ## 5. Tarefa 4 - Avaliação no conjunto de teste
 
@@ -86,16 +86,10 @@ Matriz de confusão (linhas = real, colunas = previsto):
 
 **Acurácia: 0,754.**
 
-**Entre quais classes o modelo erra com mais frequência?** Entre **ruim e médio**: 37 ruins previstos como médios
-e 27 médios previstos como ruins (64 dos 67 erros). São classes vizinhas na escala (notas 5 e 6), com composições
-químicas parecidas, então seus vinhos ficam próximos no espaço de atributos.
+Entre **ruim e médio**: 37 ruins previstos como médios e 27 médios previstos como ruins (64 dos 67 erros). São classes vizinhas na escala (notas 5 e 6), com composições químicas parecidas, então seus vinhos ficam próximos no espaço de atributos.
 
-A classe **bom nunca foi prevista**: os 3 vinhos bons do teste foram classificados como médios. Com só 17 vinhos
-bons no total, é raro que a maioria dos 11 vizinhos de um vinho seja "bom". A acurácia de 75% esconde esse
+A classe bom nunca foi prevista: os 3 vinhos bons do teste foram classificados como médios. Com só 17 vinhos
+bons no total, é raro que a maioria dos 11 vizinhos de um vinho seja bom. A acurácia de 75% esconde esse
 problema; para melhorar a classe minoritária seria preciso tratar o desbalanceamento (por exemplo, com SMOTE ou
 com votação ponderada pela distância).
 
-## 6. Como reproduzir
-
-- **Google Colab:** clique em "Abrir no Colab" acima e execute todas as células.
-- **No computador:** siga as instruções do [README](../../../README.md) e execute `src/problema3.ipynb`.
