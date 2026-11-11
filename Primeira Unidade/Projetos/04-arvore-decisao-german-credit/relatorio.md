@@ -13,21 +13,21 @@ idade e classe são idênticos nas 1.000 linhas. Sem valores ausentes e sem dupl
 
 ## 2. Tarefa 1 - Preparação dos dados
 
-- **Numéricos (7):** `duration`, `credit_amount`, `installment_commitment`, `residence_since`, `age`,
+- Numéricos (7): `duration`, `credit_amount`, `installment_commitment`, `residence_since`, `age`,
   `existing_credits`, `num_dependents`.
-- **Categóricos (13):** `checking_status`, `credit_history`, `purpose`, `savings_status`, `employment`,
+- Categóricos (13): `checking_status`, `credit_history`, `purpose`, `savings_status`, `employment`,
   `personal_status`, `other_parties`, `property_magnitude`, `other_payment_plans`, `housing`, `job`,
   `own_telephone`, `foreign_worker`.
-- **Codificação:** é necessária, porque o `DecisionTreeClassifier` do scikit-learn só aceita números. Usei
-  **one-hot encoding** (20 → 61 atributos). Como ele não aprende nada dos dados, pode ser feito antes da divisão
+- Codificação: é necessária, porque o `DecisionTreeClassifier` do scikit-learn só aceita números. Usei
+  one-hot encoding (20 → 61 atributos). Como ele não aprende nada dos dados, pode ser feito antes da divisão
   sem vazamento.
-- **Balanceamento:** 700 `good` (70%) x 300 `bad` (30%). **Impacto na acurácia:** um modelo que respondesse
+- Balanceamento: 700 `good` (70%) x 300 `bad` (30%). Impacto na acurácia: um modelo que respondesse
   sempre "good" já teria 70% de acurácia sem aprender nada. Então a acurácia precisa ser comparada com essa linha
-  de base, e o mais importante é o **recall da classe `bad`**.
+  de base, e o mais importante é o recall da classe `bad`.
 
 ## 3. Tarefa 2 - Por que a normalização não é necessária
 
-A árvore faz perguntas do tipo "atributo ≤ limiar?", **um atributo por vez**, e só a **ordem** dos valores importa.
+A árvore faz perguntas do tipo "atributo ≤ limiar?", um atributo por vez, e só a ordem dos valores importa.
 Mudar a escala de um atributo (por exemplo, converter o valor para outra moeda) muda o número do limiar, mas separa
 exatamente as mesmas amostras. A árvore resultante é a mesma. Diferente do k-NN, não há cálculo de distância entre
 atributos de escalas diferentes.
@@ -51,15 +51,15 @@ exatamente 70% `good` e 30% `bad`.
 ![Treino x validação (Gini)](resultados/profundidade_gini.png)
 ![Gini x entropia](resultados/gini_vs_entropia.png)
 
-- **Profundidade muito baixa → underfitting:** a árvore é simples demais; treino e validação ficam baixos e
+- Profundidade muito baixa → underfitting: a árvore é simples demais; treino e validação ficam baixos e
   próximos dos 70% do "sempre good".
-- **Profundidade muito alta → overfitting:** sem limite, o treino chega a **100%** e a validação cai para **68%**.
+- Profundidade muito alta → overfitting: sem limite, o treino chega a 100% e a validação cai para 68%.
   A árvore decorou o treino, inclusive o ruído.
-- **Gini x entropia:** o melhor Gini foi a profundidade 2 (0,7062) e a melhor entropia foi a profundidade 5 (0,7075).
-  A diferença (0,001) é bem menor que o desvio entre os folds (~0,02): **não há diferença relevante** entre os
+- Gini x entropia: o melhor Gini foi a profundidade 2 (0,7062) e a melhor entropia foi a profundidade 5 (0,7075).
+  A diferença (0,001) é bem menor que o desvio entre os folds (~0,02): não há diferença relevante entre os
   critérios.
-- **Escolha final: entropia com profundidade 5.** Ela teve a maior acurácia de validação. Além disso, a árvore
-  Gini de profundidade 2 é **degenerada**: as 4 folhas preveem "good", e ela prevê "good" para os 800 clientes do
+- Escolha final: entropia com profundidade 5. Ela teve a maior acurácia de validação. Além disso, a árvore
+  Gini de profundidade 2 é degenerada: as 4 folhas preveem "good", e ela prevê "good" para os 800 clientes do
   treino. Ou seja, nunca identifica um mau pagador.
 
 ## 6. Tarefa 5 - Interpretação do modelo
@@ -71,10 +71,10 @@ A árvore final tem 25 folhas.
 
 **Três atributos mais determinantes:**
 
-1. **`checking_status`** (situação da conta corrente), em especial "não possui conta" (`no checking`):
+1. checking_status (situação da conta corrente), em especial não possui conta no checking:
    importância 0,306. É a pergunta da raiz.
-2. **`duration`** (duração do empréstimo): 0,109.
-3. **`age`** (idade): 0,084.
+2. duration (duração do empréstimo): 0,109.
+3. age (idade): 0,084.
 
 **Regras do caminho até a folha com mais maus pagadores** (96 `bad` x 135 `good`, 231 clientes no treino):
 
@@ -84,14 +84,11 @@ A árvore final tem 25 folhas.
 > **E** a finalidade **não é carro usado**
 > **ENTÃO** a árvore prevê **"good"**.
 
-Ela tem o maior número absoluto de maus pagadores porque é a **maior folha** da árvore, mas a maioria ali (58%) é
-de bons pagadores, então a previsão é "good". Isso mostra que a árvore não consegue separar bem os clientes desse
-grupo grande.
+Ela tem o maior número absoluto de maus pagadores porque é a maior folha da árvore, mas a maioria ali (58%) é de bons pagadores, então a previsão é "good". Isso mostra que a árvore não consegue separar bem os clientes desse grupo grande.
 
-Para comparação, a folha que **prevê "bad"** com mais maus pagadores (55 `bad` x 27 `good`):
+Para comparação, a folha que prevê "bad" com mais maus pagadores (55 `bad` x 27 `good`):
 
-> **SE** o cliente possui conta corrente **E** a duração é de 12 a 47 meses **E** o valor solicitado é **no
-> máximo 1.381,50 marcos** **E** **não há fiador** **ENTÃO** a árvore prevê **"bad"**.
+> Se o cliente possui conta corrente e a duração é de 12 a 47 meses e o valor solicitado é no máximo 1.381,50 marcos e não há fiador então a árvore prevê "bad".
 
 ## 7. Tarefa 6 - Avaliação no conjunto de teste
 
@@ -102,20 +99,12 @@ Para comparação, a folha que **prevê "bad"** com mais maus pagadores (55 `bad
 | Sem ajuste | 0,700 | 0,500 | 0,217 | **47** | 13 |
 | `class_weight="balanced"` | 0,615 | 0,429 | **0,850** | 9 | 68 |
 
-**Qual erro é mais frequente?** Classificar um **mau pagador como bom**: 47 dos 60 maus pagadores do teste foram
-aprovados (recall de `bad` = 0,217). A acurácia de 0,70 é igual à do "sempre good".
+Qual erro é mais frequente? Classificar um mau pagador como bom: 47 dos 60 maus pagadores do teste foram
+aprovados (recall de bad = 0,217). A acurácia de 0,70 é igual à do "sempre good".
 
-**Por que é o mais grave?** Porque significa **conceder crédito a quem não vai pagar**, o que gera **prejuízo
-direto** (o valor emprestado). Recusar um bom pagador gera apenas perda de receita. A documentação do dataset
-atribui custo **5 vezes maior** a esse erro.
+Por que é o mais grave? Porque significa conceder crédito a quem não vai pagar, o que gera prejuízo
+direto. Recusar um bom pagador gera apenas perda de receita. A documentação do dataset atribui custo 5 vezes maior a esse erro.
 
-**Que ajuste eu faria?** Treinar com **`class_weight="balanced"`**, que dá mais peso aos erros na classe
-minoritária. Os maus pagadores aprovados caíram de **47 para 9** e o recall de `bad` subiu para **0,85**. O preço
-foi recusar mais bons pagadores (13 → 68) e a acurácia cair para 0,615. Como aprovar um mau pagador é o erro mais
-caro, a troca compensa. Outras opções seriam pesos ainda maiores para `bad`, seguindo o custo 5, ou mudar o limiar
-de decisão.
+Que ajuste eu faria? Treinar com class_weight="balanced", que dá mais peso aos erros na classe minoritária. Os maus pagadores aprovados caíram de 47 para 9 e o recall de bad subiu para 0,85. O preço
+foi recusar mais bons pagadores (13 → 68) e a acurácia cair para 0,615. Como aprovar um mau pagador é o erro mais caro, a troca compensa. Outras opções seriam pesos ainda maiores para bad, seguindo o custo 5, ou mudar o limiar de decisão.
 
-## 8. Como reproduzir
-
-- **Google Colab:** clique em "Abrir no Colab" acima e execute todas as células.
-- **No computador:** siga as instruções do [README](../../../README.md) e execute `src/problema4.ipynb`.
