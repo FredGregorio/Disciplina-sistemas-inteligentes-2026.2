@@ -11,11 +11,11 @@ k-NN. Dataset: UCI Wine Quality, arquivo `winequality-red.csv`, com 1.599 vinhos
 
 ## 2. Tarefa 1 - Preparação dos dados
 
-- **Duplicatas removidas:** o arquivo tem **240 linhas repetidas**. Elas foram removidas antes da divisão, restando
-  **1.359 vinhos**. No k-NN, uma cópia no treino e outra no teste fazem o vizinho mais próximo ser o próprio vinho
+- Duplicatas removidas: o arquivo tem 240 linhas repetidas. Elas foram removidas antes da divisão, restando
+  1.359 vinhos. No k-NN, uma cópia no treino e outra no teste fazem o vizinho mais próximo ser o próprio vinho
   (distância zero), o que infla a acurácia. Antes da remoção, 63 dos 320 vinhos do teste tinham cópia idêntica no
-  treino, e isso fazia `k = 1` parecer o melhor valor de forma enganosa.
-- **Recodificação da qualidade:** nota ≤ 5 → ruim; 6–7 → médio; ≥ 8 → bom.
+  treino, e isso fazia k = 1 parecer o melhor valor de forma enganosa.
+- Recodificação da qualidade: nota ≤ 5 → ruim; 6–7 → médio; ≥ 8 → bom.
 
   | Classe | Vinhos |
   |---|---|
@@ -23,11 +23,11 @@ k-NN. Dataset: UCI Wine Quality, arquivo `winequality-red.csv`, com 1.599 vinhos
   | ruim | 640 |
   | bom | 17 |
 
-  A classe **bom** tem apenas 1,3% dos dados: o conjunto é **desbalanceado**.
-- **Normalização Min-Max** (atributos entre 0 e 1), ajustada só no treino.
+  A classe bom tem apenas 1,3% dos dados: o conjunto é desbalanceado.
+- Normalização Min-Max (atributos entre 0 e 1), ajustada só no treino.
 
-**Por que a normalização é obrigatória no k-NN?** O k-NN decide pela **distância euclidiana** entre os vinhos.
-Os atributos têm escalas muito diferentes: `total sulfur dioxide` vai de 6 a 289, enquanto `density` varia de
+Por que a normalização é obrigatória no k-NN? O k-NN decide pela distância euclidiana entre os vinhos.
+Os atributos têm escalas muito diferentes: `total sulfur dioxide` vai de 6 a 289, enquanto density varia de
 0,990 a 1,004. Sem normalizar, as variáveis com valores grandes dominariam a distância e as demais seriam
 praticamente ignoradas. Com a normalização, todas contribuem de forma equilibrada.
 
