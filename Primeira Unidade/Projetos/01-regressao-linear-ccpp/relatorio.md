@@ -68,5 +68,5 @@ Como as variáveis estão padronizadas, os coeficientes são comparáveis: AT é
 ![Real x Previsto](resultados/real_vs_previsto.png)
 ![Resíduos](resultados/residuos.png)
 
-O modelo é adequado para prever a produção de energia? Sim, com ressalvas. Explica cerca de 93% da variação de PE. O erro típico é de ~4,5 MW (RMSE) e ~3,6 MW (MAE), pequeno diante do desvio padrão de PE 17 MW e da faixa de valores 420 a 496 MW. Treino e teste têm métricas praticamente iguais, então não há overfitting: o modelo generaliza bem. Ressalva: o gráfico de resíduos mostra uma leve curvatura e erros um pouco maiores nas pontas. A relação não é perfeitamente linear, e um modelo mais flexível poderia melhorar um pouco o resultado.
+O modelo é adequado para prever a produção de energia? Sim, com ressalvas. Explica cerca de 93% da variação de PE. O erro típico é de ~4,5 MW (RMSE) e ~3,6 MW (MAE), pequeno diante do desvio padrão de PE 17 MW e da faixa de valores 420 a 496 MW. Treino e teste têm métricas praticamente iguais, então não há overfitting e o modelo generaliza bem. Porem o gráfico de resíduos mostra uma leve curvatura e erros um pouco maiores nas pontas e a relação não é perfeitamente linear, e um modelo mais flexível poderia melhorar um pouco o resultado.
 
